@@ -1,0 +1,295 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "REST API documentation for a simple real estate registry for buildings",
+    "version": "1.0.0",
+    "title": "Buildings Registry"
+  },
+  "host": "localhost:8080",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Buildings",
+      "description": "Everything about buildings"
+    },
+    {
+      "name": "Taxes",
+      "description": "Everything about taxes"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/buildings": {
+      "get": {
+        "tags": [
+          "Buildings"
+        ],
+        "summary": "Retrieve all buildings from H2 database",
+        "description": "This endpoint uses a get request to retrieve all buildings",
+        "operationId": "retrieveBuildings",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Buildings"
+        ],
+        "summary": "Create a new building object",
+        "description": "Create and upload new building object to H2 database",
+        "operationId": "createBuilding",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "description": "building address",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "in": "query",
+            "description": "building owner",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "building size in square meters",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "description": "value",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "type",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/buildings/{buildingId}": {
+      "get": {
+        "tags": [
+          "Buildings"
+        ],
+        "summary": "Return a single building",
+        "description": "This endpoint uses a get request to retrieve a specific building",
+        "operationId": "findBuildingById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "buildingId",
+            "in": "path",
+            "description": "This is unique identifier of the building",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Buildings"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Building not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Buildings"
+        ],
+        "summary": "Update an existing building",
+        "description": "This endpoint uses a put request to update specific building",
+        "operationId": "updateBuilding",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "buildingId",
+            "in": "path",
+            "description": "This is unique identifier of the building",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "requestbody",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Buildings"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Building not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Buildings"
+        ],
+        "summary": "Delete an existing building",
+        "description": "This endpoint uses a delete request to delete specific building",
+        "operationId": "deleteBuilding",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "buildingId",
+            "in": "path",
+            "description": "This is unique identifier of the building",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Building not found"
+          }
+        }
+      }
+    },
+    "/buildings/taxes/{buildingId}": {
+      "put": {
+        "tags": [
+          "Taxes"
+        ],
+        "summary": "Update taxes",
+        "description": "This endpoint uses a put request to update taxes of specific building",
+        "operationId": "updateTaxes",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "buildingId",
+            "in": "path",
+            "description": "This is unique identifier of the building",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Building not found"
+          }
+        }
+      }
+    },
+    "/buildings/owner": {
+      "get": {
+        "tags": [
+          "Taxes"
+        ],
+        "summary": "Find total value of taxes ",
+        "description": "This endpoint uses a get request to calculate total value of taxes of specified owner",
+        "operationId": "calculateTaxes",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "query",
+            "description": "Owner name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Buildings": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "address": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        },
+        "value": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string"
+        },
+        "tax": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
